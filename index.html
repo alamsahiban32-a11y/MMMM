@@ -3,185 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सुपर फ़ास्ट क्रोम मल्टी-टैब ओपनर</title>
+    <title>यूनिक मल्टी-टास्किंग डैशबोर्ड</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #0b0f19;
+            color: #e2e8f0;
             margin: 0;
+            padding: 15px;
         }
-        .container {
-            background-color: #1e293b;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 550px;
-            width: 100%;
+        .header-panel {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
             border: 1px solid #334155;
         }
-        h2 {
-            color: #38bdf8;
-            margin-bottom: 25px;
-            font-size: 24px;
+        .input-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
         }
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
         }
         label {
-            display: block;
             margin-bottom: 8px;
             font-size: 14px;
             color: #94a3b8;
         }
-        input[type="url"], input[type="number"] {
-            width: 100%;
+        input {
             padding: 12px;
-            border: 1px solid #475569;
             border-radius: 6px;
-            font-size: 16px;
-            background-color: #0f172a;
-            color: #fff;
-            box-sizing: border-box;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            font-size: 15px;
         }
         input:focus {
             outline: none;
             border-color: #38bdf8;
         }
-        .shortcuts {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            justify-content: flex-start;
-        }
-        .shortcut-btn {
-            background-color: #334155;
-            color: #cbd5e1;
-            border: 1px solid #475569;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .shortcut-btn:hover {
-            background-color: #475569;
-            color: #fff;
-        }
-        button.main-btn {
-            background-color: #38bdf8;
+        button {
+            background: #38bdf8;
             color: #0f172a;
             border: none;
-            padding: 14px 28px;
-            font-size: 16px;
+            padding: 12px 25px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
+            height: 46px;
+        }
+        button:hover {
+            background: #0ea5e9;
+        }
+        /* ग्रिड लेआउट - जो स्क्रीन को बराबर भागों में बांटेगा */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+            gap: 15px;
             width: 100%;
-            margin-top: 10px;
         }
-        button.main-btn:hover {
-            background-color: #0ea5e9;
+        @media (max-width: 768px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
-        .status-counter {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #020617;
-            border-radius: 6px;
-            border: 1px solid #22c55e;
-            color: #4ade80;
+        .window-box {
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 8px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .window-title {
+            background: #334155;
+            padding: 8px 12px;
+            font-size: 13px;
             font-weight: bold;
-            display: none;
+            color: #38bdf8;
+            display: flex;
+            justify-content: space-between;
         }
-        .note {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #94a3b8;
-            line-height: 1.5;
-            text-align: left;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🚀 क्रोम सुपर मल्टी-टैब ओपनर</h2>
-    
-    <!-- लिंक इनपुट -->
-    <div class="input-group">
-        <label for="webUrl">वेबसाइट का लिंक (URL) यहाँ डालें:</label>
-        <input type="url" id="webUrl" placeholder="https://example.com" value="https://www.google.com">
-    </div>
-
-    <!-- क्विक शॉर्टकट बटन्स (यहाँ आप अपने रोज़ के लिंक सेट कर सकते हैं) -->
-    <div class="shortcuts">
-        <span style="font-size: 12px; color: #94a3b8; align-self: center;">शॉर्टकट:</span>
-        <button class="shortcut-btn" onclick="setLink('https://www.google.com')">Google</button>
-        <button class="shortcut-btn" onclick="setLink('https://www.bing.com')">Bing</button>
-    </div>
-
-    <!-- टैब संख्या -->
-    <div class="input-group">
-        <label for="tabCount">कितने टैब्स एक साथ खोलने हैं? (Max 1000):</label>
-        <input type="number" id="tabCount" min="1" max="1000" value="5">
-    </div>
-    
-    <button class="main-btn" onclick="openChromeTabs()">रफ़्तार से टैब खोलें (Enter)</button>
-    
-    <!-- लाइव काउंटर (यह स्क्रीन पर दिखाएगा कि कितने टैब खुले) -->
-    <div id="statusCounter" class="status-counter"></div>
-
-    <div class="note">
-        <strong>⚠️ सबसे ज़रूरी (Pop-up Blocker):</strong> जब आप पहली बार बटन दबाएंगे, तो क्रोम ऊपर एड्रेस बार में पॉप-अप ब्लॉक कर देगा। वहाँ लाल निशान पर क्लिक करके <strong>"Always allow pop-ups"</strong> (हमेशा अनुमति दें) को चुनें। उसके बाद यह 100% काम करेगा।
+<div class="header-panel">
+    <h3 style="margin-top:0; color:#38bdf8;">🖥️ एक स्क्रीन पर मल्टी-टास्किंग पैनल</h3>
+    <div class="input-row">
+        <div class="form-group" style="flex: 2;">
+            <label>वेबसाइट का लिंक (URL) डालें:</label>
+            <input type="url" id="targetUrl" value="https://bing.com" placeholder="https://example.com">
+        </div>
+        <div class="form-group" style="flex: 0.5; min-width: 100px;">
+            <label>कितने पेज (Max 10):</label>
+            <input type="number" id="windowCount" value="4" min="1" max="10">
+        </div>
+        <button onclick="loadMultitaskingGrid()">डैशबोर्ड चालू करें</button>
     </div>
 </div>
 
+<!-- यहीं पर सारी स्क्रीन्स अलग-अलग दिखाई देंगी -->
+<div id="dashboardGrid" class="dashboard-grid"></div>
+
 <script>
-// शॉर्टकट बटन के लिए फंक्शन
-function setLink(url) {
-    document.getElementById('webUrl').value = url;
+function loadMultitaskingGrid() {
+    let url = document.getElementById('targetUrl').value.trim();
+    let count = parseInt(document.getElementById('windowCount').value);
+    let grid = document.getElementById('dashboardGrid');
+    
+    if(!url.match(/^https?:\/\//i)) { url = 'https://' + url; }
+    if(!url || isNaN(count)) { alert("कृपया सही लिंक और संख्या डालें"); return; }
+
+    grid.innerHTML = ""; // पुराना साफ़ करें
+
+    for(let i = 1; i <= count; i++) {
+        let uniqueUrl = url;
+        // यूआरएल के पीछे यूनिक आईडी जोड़ना ताकि सेशन अलग होने की कोशिश हो
+        if (uniqueUrl.includes('?')) {
+            uniqueUrl += `&mysession=${i}`;
+        } else {
+            uniqueUrl += `?mysession=${i}`;
+        }
+
+        let box = document.createElement('div');
+        box.className = 'window-box';
+        
+        box.innerHTML = `
+            <div class="window-title">
+                <span>टास्क विंडो #${i} (स्वतंत्र मोड)</span>
+                <span style="color:#4ade80;">● Active</span>
+            </div>
+            <iframe src="${uniqueUrl}"></iframe>
+        `;
+        grid.appendChild(box);
+    }
 }
-
-function openChromeTabs() {
-    let url = document.getElementById('webUrl').value.trim();
-    let count = parseInt(document.getElementById('tabCount').value);
-    let statusCounter = document.getElementById('statusCounter');
-
-    if (!url.match(/^https?:\/\//i)) {
-        url = 'https://' + url;
-    }
-
-    if (!url || url === 'https://') {
-        alert("कृपया एक सही वेबसाइट लिंक डालें!");
-        return;
-    }
-    if (isNaN(count) || count < 1 || count > 1000) {
-        alert("कृपया 1 से 1000 के बीच की संख्या डालें!");
-        return;
-    }
-
-    // स्क्रीन पर लाइव काउंटर दिखाना
-    statusCounter.style.display = "block";
-    statusCounter.innerText = `सफलतापूर्वक Chrome में ${count} टैब खोले जा रहे हैं...`;
-
-    // क्रोम के असली न्यू टैब में लिंक खोलना (इसमें कोई वेबसाइट एरर नहीं देगी)
-    for (let i = 0; i < count; i++) {
-        window.open(url, `_blank_chrome_${i}_${Date.now()}`);
-    }
-}
-
-// Enter कीबोर्ड बटन सपोर्ट
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        openChromeTabs();
-    }
-});
 </script>
 
 </body>
